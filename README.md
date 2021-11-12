@@ -20,7 +20,7 @@ https://developer.spotify.com/
 まずSpotifyにログインし、Spotify for Developersの[Dashboard](https://developer.spotify.com/dashboard/login)にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
 なお `Client ID` と "SHOW CLIENT SECRET" クリックで表示される `Client Secret` は後で必要になる。晒すとヤバそう。
 
-折角なのでGitHubを使う。GitHub Desktopを起動して（リモート？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
+折角なのでGitHubを使う。GitHub Desktopを起動して（ローカル？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
 
 AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip install spotipy --upgrade` 。Spotipyの公式ドキュメントは[ここ](https://spotipy.readthedocs.io/en/2.19.0/)。また環境変数を使うために、[これ](https://www.twilio.com/blog/environment-variables-python-jp)を参考に `pip install python-dotenv` もしとく。
 
@@ -29,6 +29,14 @@ AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip 
 また、後々 `Client ID` とか `Client Secret` とかをコード内で使うことになるが、そのままコードに組み込んでGitHubとかで公開するとマズいので、
 
 `caitsith.py` とか名前は何でもいいので `.py` ファイルを作成する。なお左下の `Python x.x.xx 64-bit ('hogehoge': conda)` の箇所をクリックすれば仮想環境を選択できる。で `print ("Hello, Python!")` でもしてF5を押すとDebug Configurationとやらが出てくるが、そのままEnterを押せば `Python File` として実行してくれそう。[^1]
+
+## GitHubいろいろ
+今回使用しているのはいつ入れたか忘れたGitHub Desktop。コマンドラインは嫌や！
+
+File > New Repositoryしてからローカルフォルダ指定・README・`.gitignore`・ライセンスをなんやかんやしてリポジトリ作成。今後変更があった場合は適宜（ローカルリポジトリに）commitを行う。
+
+なおこのままだと外部には公開されていないので、Publish repositoryでGitHubのサイトに公開できる。このとき`Keep this code private`にチェックを入れたままだと他人が見られないので注意。後からサイトにアクセスしてSettingのDanger Zoneから公開設定を変更できるが赤くて怖いので注意。
+
 
 
 [^1]: ajajajajaja
