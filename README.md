@@ -47,3 +47,4 @@ File > New Repositoryしてからローカルフォルダ指定・README.md・`.
 
 
 [^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)
+[^2]: [twilio BLOG: Pythonで環境変数を活用する](https://www.twilio.com/blog/environment-variables-python-jp)
