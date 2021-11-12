@@ -44,7 +44,7 @@ wincertstore              0.2              py38haa95532_2
 ```
 
 ## 使い方
-上述の環境を用意して `caitsith.py` を実行すれば謎の文字列が出力される。
+後述の `Client ID` と `Client Secret` を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行すれば謎の文字列が出力される。
 
 
 ## 作る手順メモ
