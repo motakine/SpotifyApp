@@ -4,8 +4,8 @@ from dotenv import dotenv_values
 from dotenv import load_dotenv
 import sys
 
-def get_samples_and_cover_art_for_10_tracks_for_selected_artist(spotify, artist_uri):
-  results = spotify.artist_top_tracks(artist_uri)
+def get_10_tracks_for_selected_artist(spotify, artist_id):
+  results = spotify.artist_top_tracks(artist_id)
 
   for track in results['tracks'][:10]:
     print('track    : ' + track['name'])
@@ -17,19 +17,11 @@ def client_credentials_something():
   # これはClient Credentials FlowのManagerらしい。
   client_credentials_manager = spotipy.oauth2.SpotifyClientCredentials()
   # Spotify API client
-  spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-  artist_uri = "https://open.spotify.com/artist/6B9SjvZNSQZkeJDH17oBSO?si=ki7eUh6qTAmwEN239KGYsw"
-  get_samples_and_cover_art_for_10_tracks_for_selected_artist(spotify, artist_uri)
+  spotify = spotipy.Spotify(auth_manager=client_credentials_manager)
+  artist_id = "https://open.spotify.com/artist/6B9SjvZNSQZkeJDH17oBSO?si=ki7eUh6qTAmwEN239KGYsw"
+  get_10_tracks_for_selected_artist(spotify, artist_id)
 
 if __name__ == "__main__":
-  # # .envファイルに含まれるやつを辞書として返す。
-  # config = dotenv_values(".env")
-
-  # # 環境変数からClient ID, Client Secret, Redirect URIをゲット
-  # client_id     = config['SPOTIPY_CLIENT_ID']
-  # client_secret = config['SPOTIPY_CLIENT_SECRET']
-  # redirect_uri  = config['SPOTIPY_REDIRECT_URI']
-
   # .envファイルの内容を環境変数としてos.environ辞書に追加。
   # ファイルが見つからないなら親へ親へと辿っていく
   load_dotenv()
