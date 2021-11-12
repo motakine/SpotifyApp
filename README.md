@@ -22,7 +22,7 @@ https://developer.spotify.com/
 
 折角なのでGitHubを使う。GitHub Desktopを起動して（ローカル？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
 
-AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip install spotipy --upgrade` [^1]。また環境変数を使うために、[これ](https://www.twilio.com/blog/environment-variables-python-jp)を参考に `pip install python-dotenv` もしとく。
+AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip install spotipy --upgrade` [^1]。また環境変数を使うために `pip install python-dotenv` もしとく[^2]。
 
 でなんかGitHub Desktop側でリポジトリフォルダをVS Codeで開くみたいなのがあったのでそれで作業を行う。都度 `README.md` にやったことをメモしていく。
 
