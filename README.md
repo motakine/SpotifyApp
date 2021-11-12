@@ -61,7 +61,8 @@ AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip 
 
 また、後々 `Client ID` とか `Client Secret` とかをコード内で使うことになるが、そのままコードに組み込んでGitHubとかで公開するとマズいので、`.env`ファイル内に環境変数として記述しておき、コード内では`python-dotenv`の関数を使うことにする。  
 但し`.env`ファイルをGitHubに公開してしまうとそれもマズいので、`.gitignore`に`.env`の行が含まれていることを確認する（リポジトリを作成するときの設定でデフォで入ってるはず）。必要な環境変数は[Spotify Web APIのクイックスタート](https://developer.spotify.com/documentation/web-api/quick-start/)を参照した。  
-どんな環境変数を使っているかをGitHubに公開したい場合は`.env.example`ファイルを作成してそこに適当に書く（本物のキーを入力しないように）[^2]。
+どんな環境変数を使っているかをGitHubに公開したい場合は`.env.example`ファイルを作成してそこに適当に書く（本物のキーを入力しないように）[^2]。  
+なおSpotipyを使う場合は `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` の3つを環境変数に追加しておいたほうが良さそうな雰囲気（SPOTIFYではなくSPOTI **P** Y)）。
 
 `caitsith.py` とか名前は何でもいいので `.py` ファイルを作成する。なお左下の `Python x.x.xx 64-bit ('hogehoge': conda)` の箇所をクリックすれば仮想環境を選択できる。で `print ("Hello, Python!")` でもしてF5を押すとDebug Configurationとやらが出てくるが、そのままEnterを押せば `Python File` として実行してくれそう。[^1]
 
@@ -107,6 +108,9 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 ## その他メモ
 
 [Pythonスクリプトをexe化する](https://www.python.ambitious-engineer.com/archives/3306)という記事がある。
+
+[これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked Songsをシェアする方法はない。アクセスする方法はなさそう？  
+あるいはsaved_tracks関連でいける？
 
 
 [^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)  
