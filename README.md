@@ -46,7 +46,7 @@ wincertstore              0.2              py38haa95532_2
 ## 使い方
 後述の `Client ID` と `Client Secret` を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行する。
 
-結果：Current Valueの人気の10曲のサンプルとカバーアート（のURL？）が出力される。
+結果：現ユーザのLiked Songsの内容が列挙される。
 
 
 ## 作る手順メモ
@@ -97,6 +97,7 @@ File > New Repositoryしてからローカルフォルダ指定・README.md[^4][
 
 `SpotifyOAuth`クラスを使う。Redirect URIは `http://localhost:8888/callback` とかを指定しておけばよい？
 
+で現在のユーザの保存した曲のリストを取得したり色々する際にOAuth Tokenの適切なscopeをリクエストする必要がある（scopeが足りないと想定する動作が許されなかったりする）が、その確認には[Spotify for DevelopersのConsoleページ](https://developer.spotify.com/console/)がおすすめ。何をすれば何が返ってくるのかの確認もできる。
 
 ### Client Credentials Flow
 

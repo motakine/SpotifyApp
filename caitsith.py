@@ -1,5 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 from dotenv import dotenv_values
 from dotenv import load_dotenv
 import sys
@@ -21,24 +22,37 @@ def client_credentials_something():
   artist_id = "https://open.spotify.com/artist/6B9SjvZNSQZkeJDH17oBSO?si=ki7eUh6qTAmwEN239KGYsw"
   get_10_tracks_for_selected_artist(spotify, artist_id)
 
+def get_current_user_liked_songs():
+  scope = [
+    'user-library-read'
+  ]
+  sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, show_dialog=True))
+
+  limit = 50
+  offset = 0
+  results = sp.current_user_saved_tracks(limit=limit, offset=offset)
+  for idx, item in enumerate(results['items']):
+    track = item['track']
+    print(1+offset + idx, track['artists'][0]['name'], " - ", track['name'])
+  
+  total = results['total']
+  while True:
+    offset += limit
+    if offset >= total:
+      break
+    results = sp.current_user_saved_tracks(limit=limit, offset=offset)
+    for idx, item in enumerate(results['items']):
+      track = item['track']
+      print(1+offset + idx, track['artists'][0]['name'], " - ", track['name'])
+  return
+
 if __name__ == "__main__":
   # .envファイルの内容を環境変数としてos.environ辞書に追加。
   # ファイルが見つからないなら親へ親へと辿っていく
   load_dotenv()
 
-  client_credentials_something()
+  # client_credentials_something()
 
-  # scope = [
-  #   'user-read-private',
-  #   'user-read-recently-played',
-  #   'playlist-read-private',
-  #   'playlist-read-collaborative'
-  # ]
-  # sp = spotipy.Spotify(auth_manager=spotipy.oauth2.SpotifyOAuth(scope=scope))
-
-  # results = sp.current_user_saved_tracks()
-  # for idx, item in enumerate(results['items']):
-  #   track = item['track']
-  #   print(idx, track['artists'][0]['name'], " - ", track['name'])
+  get_current_user_liked_songs()
 
   
