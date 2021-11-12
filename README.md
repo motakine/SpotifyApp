@@ -35,7 +35,7 @@ AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip 
 ## GitHubいろいろ
 今回使用しているのはいつ入れたか忘れたGitHub Desktop[^3]。コマンドラインは嫌や！
 
-File > New Repositoryしてからローカルフォルダ指定・README.md[^4][^5]・`.gitignore`[^6]・ライセンスをなんやかんやしてリポジトリ作成。今後変更があった場合は適宜（ローカルリポジトリに）commitを行う。
+File > New Repositoryしてからローカルフォルダ指定・README.md[^4][^5]・`.gitignore`[^6][^7]・ライセンスをなんやかんやしてリポジトリ作成。今後変更があった場合は適宜（ローカルリポジトリに）commitを行う。
 
 なおこのままだと外部には公開されていないので、Publish repositoryでGitHubのサイトに公開する。このとき`Keep this code private`にチェックを入れたままだと他人が見られないので注意。後からサイトにアクセスしてSettingのDanger Zoneから公開設定を変更できるが赤くて怖いので注意。
 
