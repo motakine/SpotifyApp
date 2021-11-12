@@ -44,7 +44,9 @@ wincertstore              0.2              py38haa95532_2
 ```
 
 ## 使い方
-後述の `Client ID` と `Client Secret` を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行すれば謎の文字列が出力される。
+後述の `Client ID` と `Client Secret` を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行する。
+
+結果：Current Valueの人気の10曲のサンプルとカバーアート（のURL？）が出力される。
 
 
 ## 作る手順メモ
@@ -74,6 +76,32 @@ File > New Repositoryしてからローカルフォルダ指定・README.md[^4][
 
 以降ローカルの変更をcommitしたあとにリモートにも反映させる場合は、Publish repositoryがPush Originになっているのでそれで。
 
+
+## Spotipyメモ
+
+公式ドキュメントの翻訳とかやが…
+
+すべてのメソッドはユーザ認証必須なので、Dashboardから認証情報を得ておく必要がある。
+
+認証の流れは2つある。
+
+- **Authorization Code flow** は、ユーザーが一度ログインするだけの長時間稼働のアプリケーションに適しています。アクセストークンを提供し、それをリフレッシュすることができます。
+  - Dashboardでredirect URIを追加しておく必要がある。
+- **Client Credentials flow** により、Spotify Web APIへのリクエストを認証し、Authorization Codeフローよりも高いレート制限を得ることが可能になります。
+
+
+### Authorization Code Flow
+
+このフローは、ユーザーが一度だけ許可を与えるような長時間稼働のアプリケーションに適しています。このフローでは、リフレッシュ可能なアクセストークンを提供します。トークンの交換には秘密鍵の送信を伴うため、ブラウザやモバイルアプリなどのクライアントからではなく、バックエンドサービスなどの安全な場所で実行してください。
+
+`SpotifyOAuth`クラスを使う。Redirect URIは `http://localhost:8888/callback` とかを指定しておけばよい？
+
+
+### Client Credentials Flow
+
+Client Credentialsフローは、サーバー間認証で使用されます。ユーザー情報にアクセスしないエンドポイントのみがアクセスできます。アクセストークンを使用しないWeb APIへのリクエストと比較して、より高いレート制限が適用されるという利点があります。
+
+`SpotifyClientCredentials` クラスを使う。ユーザ情報へのアクセスはできない。Redirect URIは不要。
 
 
 [^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)  
