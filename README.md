@@ -16,7 +16,38 @@ https://developer.spotify.com/
 
 なんかAPIが存在していてなんかできるらしい。
 
-# 作る手順メモ
+## 実行環境
+- Windows 10 Home
+- Anaconda 4.10.1
+- `conda list` ：
+
+```
+# Name                    Version                   Build  Channel
+ca-certificates           2021.10.26           haa95532_2
+certifi                   2021.10.8        py38haa95532_0
+charset-normalizer        2.0.7                    pypi_0    pypi
+idna                      3.3                      pypi_0    pypi
+openssl                   1.1.1l               h2bbff1b_0
+pip                       21.0.1           py38haa95532_0
+python                    3.8.12               h6244533_0
+python-dotenv             0.19.2                   pypi_0    pypi
+requests                  2.26.0                   pypi_0    pypi
+setuptools                58.0.4           py38haa95532_0
+six                       1.16.0                   pypi_0    pypi
+spotipy                   2.19.0                   pypi_0    pypi
+sqlite                    3.36.0               h2bbff1b_0
+urllib3                   1.26.7                   pypi_0    pypi
+vc                        14.2                 h21ff451_1
+vs2015_runtime            14.27.29016          h5e58377_2
+wheel                     0.37.0             pyhd3eb1b0_1
+wincertstore              0.2              py38haa95532_2
+```
+
+## 使い方
+上述の環境を用意して `caitsith.py` を実行すれば謎の文字列が出力される。
+
+
+## 作る手順メモ
 まずSpotifyにログインし、Spotify for Developersの[Dashboard](https://developer.spotify.com/dashboard/login)にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
 なお `Client ID` と "SHOW CLIENT SECRET" クリックで表示される `Client Secret` は後で必要になる。晒すとヤバそう。
 
@@ -24,13 +55,15 @@ https://developer.spotify.com/
 
 AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip install spotipy --upgrade` [^1]。また環境変数を使うために `pip install python-dotenv` もしとく[^2]。
 
-でなんかGitHub Desktop側でリポジトリフォルダをVS Codeで開くみたいなのがあったのでそれで作業を行う。都度 `README.md` にやったことをメモしていく。
+でなんかGitHub Desktop側でリポジトリフォルダをVS Codeで開くみたいなのがあったのでそれで作業を行う。都度 `README.md` にやったことをメモしていく。ちなみにVS CodeでMarkdownのプレビューは「Ctrl+K, V」で行える。
 
 また、後々 `Client ID` とか `Client Secret` とかをコード内で使うことになるが、そのままコードに組み込んでGitHubとかで公開するとマズいので、`.env`ファイル内に環境変数として記述しておき、コード内では`python-dotenv`の関数を使うことにする。  
 但し`.env`ファイルをGitHubに公開してしまうとそれもマズいので、`.gitignore`に`.env`の行が含まれていることを確認する（リポジトリを作成するときの設定でデフォで入ってるはず）。必要な環境変数は[Spotify Web APIのクイックスタート](https://developer.spotify.com/documentation/web-api/quick-start/)を参照した。  
 どんな環境変数を使っているかをGitHubに公開したい場合は`.env.example`ファイルを作成してそこに適当に書く（本物のキーを入力しないように）[^2]。
 
 `caitsith.py` とか名前は何でもいいので `.py` ファイルを作成する。なお左下の `Python x.x.xx 64-bit ('hogehoge': conda)` の箇所をクリックすれば仮想環境を選択できる。で `print ("Hello, Python!")` でもしてF5を押すとDebug Configurationとやらが出てくるが、そのままEnterを押せば `Python File` として実行してくれそう。[^1]
+
+あとは頑張って色々見て[^1][^2][^8]、`.py`ファイルをいじって実行してください。
 
 ## GitHubいろいろ
 今回使用しているのはいつ入れたか忘れたGitHub Desktop[^3]。コマンドラインは嫌や！
@@ -39,7 +72,7 @@ File > New Repositoryしてからローカルフォルダ指定・README.md[^4][
 
 なおこのままだと外部には公開されていないので、Publish repositoryでGitHubのサイトに公開する。このとき`Keep this code private`にチェックを入れたままだと他人が見られないので注意。後からサイトにアクセスしてSettingのDanger Zoneから公開設定を変更できるが赤くて怖いので注意。
 
-以降ローカルの変更をcommitしたあとにリモートにも反映させる場合は、Publish repositoryがPush OriginになっているのでそこからPushができる。
+以降ローカルの変更をcommitしたあとにリモートにも反映させる場合は、Publish repositoryがPush Originになっているのでそれで。
 
 
 
@@ -49,4 +82,5 @@ File > New Repositoryしてからローカルフォルダ指定・README.md[^4][
 [^4]: GitHub Desktopのドキュメント中の[README.mdの項](https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)  
 [^5]: [記事の書き方](https://gist.github.com/LambdaNote/0d33b7d8284a3c99cffd1a5aa83c115f)
 [^6]: commitとかに含めないファイルやフォルダを指定するやつ。  
-[^7]: 書き方は[.gitignore の書き方](https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff)とか[[Git] .gitignoreの仕様詳解](https://qiita.com/anqooqie/items/110957797b3d5280c44f)とかに。
+[^7]: 書き方は[.gitignore の書き方](https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff)とか[[Git] .gitignoreの仕様詳解](https://qiita.com/anqooqie/items/110957797b3d5280c44f)とかに。  
+[^8]: [python-dotenv公式ドキュメント](https://pypi.org/project/python-dotenv/)
