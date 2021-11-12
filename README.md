@@ -104,6 +104,11 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 `SpotifyClientCredentials` クラスを使う。ユーザ情報へのアクセスはできない。Redirect URIは不要。
 
 
+## その他メモ
+
+[Pythonスクリプトをexe化する](https://www.python.ambitious-engineer.com/archives/3306)という記事がある。
+
+
 [^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)  
 [^2]: [twilio BLOG: Pythonで環境変数を活用する](https://www.twilio.com/blog/environment-variables-python-jp)  
 [^3]: [GitHub Desktopのドキュメント](https://docs.github.com/ja/desktop)  
