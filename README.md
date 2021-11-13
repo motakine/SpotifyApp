@@ -1,6 +1,10 @@
 # SpotifyApp
  Spotify Web APIとやらを使い、SpotifyをPythonでなんかする。
 
+## やりたいこと
+
+自分のLiked Songsから毎日ランダムに1曲選び、それを解説するためのアプリを作る。
+
 ## 用語諸々
 ### Spotify
 
@@ -34,6 +38,8 @@ python-dotenv             0.19.2                   pypi_0    pypi
 requests                  2.26.0                   pypi_0    pypi
 setuptools                58.0.4           py38haa95532_0
 six                       1.16.0                   pypi_0    pypi
+slack-bolt                1.10.0                   pypi_0    pypi
+slack-sdk                 3.11.2                   pypi_0    pypi
 spotipy                   2.19.0                   pypi_0    pypi
 sqlite                    3.36.0               h2bbff1b_0
 urllib3                   1.26.7                   pypi_0    pypi
@@ -52,34 +58,48 @@ wincertstore              0.2              py38haa95532_2
 ## 作る手順メモ
 ### Spotify
 
-- Spotifyにログイン
+[Spotify][spotify]にログインし、[Spotify for Developers Dashboard][spotify-dashboard]にSpotifyアカウントでログインしたら、 `CREATE AN APP` からアプリを作成。
 
-まずSpotifyにログインし、Spotify for Developersの [Dashboard][spotify-dashboard] にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
-なお `Client ID` と "SHOW CLIENT SECRET" クリックで表示される `Client Secret` は後で必要になる。晒すとヤバそう。
+- `Client ID` と `Client Secret` （"SHOW CLIENT SECRET" をクリックで表示）が後で必要になる。
+- "EDIT SETTINGS" で設定する `Redirect URIs` も一つ追加しておく。ここでは `http://localhost:8888/callback` を使用している（正当性は不明）。
 
-折角なのでGitHubを使う。GitHub Desktopを起動して（ローカル？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
+### GitHub Desktop
 
-AnacondaでPython3.8の新しい仮想環境を作り、Anaconda Promptで `pip install spotipy --upgrade` [^1]。また環境変数を使うために `pip install python-dotenv` もしとく[^2]。
+ダウンロードは[こちら][github-desktop]、ドキュメントは[こちら][github-desktop-documents]。
 
-でなんかGitHub Desktop側でリポジトリフォルダをVS Codeで開くみたいなのがあったのでそれで作業を行う。都度 `README.md` にやったことをメモしていく。ちなみにVS CodeでMarkdownのプレビューは「Ctrl+K, V」で行える。
+File > New Repositoryなどで（ローカル？）リポジトリを作成。指定したフォルダ直下にリポジトリ名のフォルダが作成される。
+- `README.md` はお好みで。書き方の[参考][github-desktop-documents-readme-md]・Markdown書き方[参考][github-writing-markdown]。
+- `.gitignore` はPythonを使うのでPythonを指定。[参考1][gitignore-qiita-1]、[参考2][gitignore-qiita-2]。
+- ライセンスはよく分からないので今は設定せず。
 
-また、後々 `Client ID` とか `Client Secret` とかをコード内で使うことになるが、そのままコードに組み込んでGitHubとかで公開するとマズいので、`.env`ファイル内に環境変数として記述しておき、コード内では`python-dotenv`の関数を使うことにする。  
-但し`.env`ファイルをGitHubに公開してしまうとそれもマズいので、`.gitignore`に`.env`の行が含まれていることを確認する（リポジトリを作成するときの設定でデフォで入ってるはず）。必要な環境変数は[Spotify Web APIのクイックスタート](https://developer.spotify.com/documentation/web-api/quick-start/)を参照した。  
-どんな環境変数を使っているかをGitHubに公開したい場合は`.env.example`ファイルを作成してそこに適当に書く（本物のキーを入力しないように）[^2]。  
-なおSpotipyを使う場合は `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` の3つを環境変数に追加しておいたほうが良さそうな雰囲気（SPOTIFYではなくSPOTI **P** Y)）。
+Repository > Open in Visual Studio CodeなどでVS Codeでの作業が行える。ファイル変更をローカルリポジトリに反映させる場合はcommitを行い、ローカルリポジトリの変更をリモートリポジトリに反映させる場合はPush originを行う。
+- Pushは初回はPublish repositoryになっており、これによりGitHubサイトへの公開が行える。
+- `Keep this code private` にチェックを入れたままPublishした場合、Publicに変更するにはサイトの方から設定のDanger Zoneで公開設定を変更する必要がある。
+  - Danger Zone、ちょっと怖い。
+- ちなみにVS CodeでのMarkdownのプレビューは「Ctrl+K, V」。
 
-`caitsith.py` とか名前は何でもいいので `.py` ファイルを作成する。なお左下の `Python x.x.xx 64-bit ('hogehoge': conda)` の箇所をクリックすれば仮想環境を選択できる。で `print ("Hello, Python!")` でもしてF5を押すとDebug Configurationとやらが出てくるが、そのままEnterを押せば `Python File` として実行してくれそう。[^1]
+### Anaconda
+Python3.8とかの新しい仮想環境を作成し、適宜パッケージをインストールする。
+- `pip install spotipy --upgrade`：Spotify Web APIの利用
+- `pip install python-dotenv`：環境変数の使用。[参考][python-environment-variable]、[公式ドキュメント][python-dotenv-documents]。
+- `pip install slack-bolt`：2021年現在新しめのslackbot等パッケージ。 `slack-sdk` も同時にインストールされる
 
-あとは頑張って色々見て[^1][^2][^8]、`.py`ファイルをいじって実行してください。
+### Visual Studio Code
+Pythonのコードを実行するにはまず `.py` ファイルを作成し、左下の `Python x.x.xx 64-bit ('hogehoge': conda)` という箇所をクリックして仮想環境を選択する。あとはF5を押すとDebug Configurationが出てくるが、そのままEnterを押せば `Python File` として実行される。
 
-## GitHubいろいろ
-今回使用しているのはいつ入れたか忘れたGitHub Desktop[^3]。コマンドラインは嫌や！
+また、APIのトークンなど公開したくない文字列は、リポジトリルートフォルダ直下に `.env` ファイルを置き、その中に環境変数として記述するとよい。
+- `.gitignore` に `.env` を記述しておけばコミットなどに含まれなくなる。今回は `.gitignore` 作成時に既定で記述されていた。
+- どのような環境変数を用いているかを公開したい場合は、 `.env.example` などといったファイルに `.env` の内容を（**実際の値は伏せて**）記述すればよい。
+- 実際にPythonコード内で `.env` の内容を環境変数として扱いたい場合は、 `python-dotenv` の関数 `load_dotenv()` を呼び出す。
 
-File > New Repositoryしてからローカルフォルダ指定・README.md[^4][^5]・`.gitignore`[^6][^7]・ライセンスをなんやかんやしてリポジトリ作成。今後変更があった場合は適宜（ローカルリポジトリに）commitを行う。
+#### 環境変数：Spotipy
 
-なおこのままだと外部には公開されていないので、Publish repositoryでGitHubのサイトに公開する。このとき`Keep this code private`にチェックを入れたままだと他人が見られないので注意。後からサイトにアクセスしてSettingのDanger Zoneから公開設定を変更できるが赤くて怖いので注意。
+Spotify for Developers Dashboardのアプリの `Client ID`, `Client Secret`, `Redirect URI` を `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` として通しておく。これにより認証の際にこれらを引数に渡す手間が省ける。
+- `SPOTIFY_XXX_XXX` でないことに注意。すぽてぃぱい。
 
-以降ローカルの変更をcommitしたあとにリモートにも反映させる場合は、Publish repositoryがPush Originになっているのでそれで。
+#### 環境変数：Slack
+
+aaaa
 
 
 ## Spotipyメモ
@@ -117,17 +137,18 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked Songsをシェアする方法はない。アクセスする方法はなさそう？  
 あるいはsaved_tracks関連でいける？
 
-[Bolt for Python][bolt-python]
 
 <!-- Markdown links -->
 
-[^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)  
-[^2]: [twilio BLOG: Pythonで環境変数を活用する](https://www.twilio.com/blog/environment-variables-python-jp)  
-[^3]: [GitHub Desktopのドキュメント](https://docs.github.com/ja/desktop)  
-[^4]: GitHub Desktopのドキュメント中の[README.mdの項](https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)  
-[^5]: [記事の書き方](https://gist.github.com/LambdaNote/0d33b7d8284a3c99cffd1a5aa83c115f)
-[^6]: commitとかに含めないファイルやフォルダを指定するやつ。  
-[^7]: 書き方は[.gitignore の書き方](https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff)とか[[Git] .gitignoreの仕様詳解](https://qiita.com/anqooqie/items/110957797b3d5280c44f)とかに。  
-[^8]: [python-dotenv公式ドキュメント](https://pypi.org/project/python-dotenv/)
-[spotify-dashboard]: https://developer.spotify.com/dashboard/
-[bolt-python]: https://github.com/slackapi/bolt-python
+[github-desktop]: https://desktop.github.com/ "GitHub Desktop"
+[github-desktop-documents]: https://docs.github.com/ja/desktop "GitHub Desktopのドキュメント"
+[github-desktop-documents-readme-md]: https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes "GitHub Desktopのドキュメント：README.md"
+[github-writing-markdown]: https://gist.github.com/LambdaNote/0d33b7d8284a3c99cffd1a5aa83c115f "GitHub: 記事の書き方"
+[gitignore-qiita-1]: https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff "Qiita: .gitignore の書き方"
+[gitignore-qiita-2]: https://qiita.com/anqooqie/items/110957797b3d5280c44f "Qiita: [Git] .gitignoreの仕様解説"
+[python-environment-variable]: https://www.twilio.com/blog/environment-variables-python-jp "twilio BLOG: Pythonで環境変数を活用する"
+[python-dotenv-documents]: https://pypi.org/project/python-dotenv/ "python-dotenv 公式ドキュメント"
+[spotify]: https://www.spotify.com/ "Spotify"
+[spotify-dashboard]: https://developer.spotify.com/dashboard/ "Spotify for Developer Dashboard"
+[spotify-webapi-tutorial]: https://developer.spotify.com/documentation/web-api/quick-start/ "Spotify Web API Tutorial"
+[spotipy-documents]: https://spotipy.readthedocs.io/en/2.19.0/ "Spotipy 公式ドキュメント"
