@@ -55,10 +55,10 @@ wincertstore              0.2              py38haa95532_2
 結果：現ユーザのLiked Songsの内容が列挙される。
 
 
-## 作る手順メモ
+## 作り方メモ
 ### Spotify
 
-[Spotify][spotify]にログインし、[Spotify for Developers Dashboard][spotify-dashboard]にSpotifyアカウントでログインしたら、 `CREATE AN APP` からアプリを作成。
+[Spotify][spotify]にログインし、[Spotify for Developers Dashboard][spotify-dev-dashboard]にSpotifyアカウントでログインしたら、 `CREATE AN APP` からアプリを作成。
 
 - `Client ID` と `Client Secret` （"SHOW CLIENT SECRET" をクリックで表示）が後で必要になる。
 - "EDIT SETTINGS" で設定する `Redirect URIs` も一つ追加しておく。ここでは `http://localhost:8888/callback` を使用している（正当性は不明）。
@@ -101,6 +101,9 @@ Spotify for Developers Dashboardのアプリの `Client ID`, `Client Secret`, `R
 
 aaaa
 
+### その他
+
+Spotify Web APIの動作・必要scopeの確認には[Spotify for Developers Console][spotify-dev-console]が便利。返り値も確認できる。
 
 ## Spotipyメモ
 
@@ -149,6 +152,7 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [python-environment-variable]: https://www.twilio.com/blog/environment-variables-python-jp "twilio BLOG: Pythonで環境変数を活用する"
 [python-dotenv-documents]: https://pypi.org/project/python-dotenv/ "python-dotenv 公式ドキュメント"
 [spotify]: https://www.spotify.com/ "Spotify"
-[spotify-dashboard]: https://developer.spotify.com/dashboard/ "Spotify for Developer Dashboard"
+[spotify-dev-console]: https://developer.spotify.com/console/ "Spotify for Developer Console"
+[spotify-dev-dashboard]: https://developer.spotify.com/dashboard/ "Spotify for Developer Dashboard"
 [spotify-webapi-tutorial]: https://developer.spotify.com/documentation/web-api/quick-start/ "Spotify Web API Tutorial"
 [spotipy-documents]: https://spotipy.readthedocs.io/en/2.19.0/ "Spotipy 公式ドキュメント"
