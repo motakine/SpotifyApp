@@ -31,17 +31,20 @@ ca-certificates           2021.10.26           haa95532_2
 certifi                   2021.10.8        py38haa95532_0
 charset-normalizer        2.0.7                    pypi_0    pypi
 idna                      3.3                      pypi_0    pypi
+oauthlib                  3.1.1                    pypi_0    pypi
 openssl                   1.1.1l               h2bbff1b_0
 pip                       21.0.1           py38haa95532_0
 python                    3.8.12               h6244533_0
 python-dotenv             0.19.2                   pypi_0    pypi
 requests                  2.26.0                   pypi_0    pypi
+requests-oauthlib         1.3.0                    pypi_0    pypi
 setuptools                58.0.4           py38haa95532_0
 six                       1.16.0                   pypi_0    pypi
 slack-bolt                1.10.0                   pypi_0    pypi
 slack-sdk                 3.11.2                   pypi_0    pypi
 spotipy                   2.19.0                   pypi_0    pypi
 sqlite                    3.36.0               h2bbff1b_0
+twitterapi                2.7.7                    pypi_0    pypi
 urllib3                   1.26.7                   pypi_0    pypi
 vc                        14.2                 h21ff451_1
 vs2015_runtime            14.27.29016          h5e58377_2
@@ -63,6 +66,14 @@ wincertstore              0.2              py38haa95532_2
 - `Client ID` と `Client Secret` （"SHOW CLIENT SECRET" をクリックで表示）が後で必要になる。
 - "EDIT SETTINGS" で設定する `Redirect URIs` も一つ追加しておく。ここでは `http://localhost:8888/callback` を使用している（正当性は不明）。
 
+### Slack
+
+Slackへの投稿を利用しないならこの項は不要。
+
+### Twitter
+
+Twitterへの投稿を利用しないならこの項は不要。
+
 ### GitHub Desktop
 
 ダウンロードは[こちら][github-desktop]、ドキュメントは[こちら][github-desktop-documents]。
@@ -83,6 +94,7 @@ Python3.8とかの新しい仮想環境を作成し、適宜パッケージを�
 - `pip install spotipy --upgrade`：Spotify Web APIの利用
 - `pip install python-dotenv`：環境変数の使用。[参考][python-environment-variable]、[公式ドキュメント][python-dotenv-documents]。
 - `pip install slack-bolt`：2021年現在新しめのslackbot等パッケージ。 `slack-sdk` も同時にインストールされる
+- `pip install TwitterAPI`：Twitter APIの利用
 
 ### Visual Studio Code
 Pythonのコードを実行するにはまず `.py` ファイルを作成し、左下の `Python x.x.xx 64-bit ('hogehoge': conda)` という箇所をクリックして仮想環境を選択する。あとはF5を押すとDebug Configurationが出てくるが、そのままEnterを押せば `Python File` として実行される。
