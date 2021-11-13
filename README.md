@@ -50,7 +50,11 @@ wincertstore              0.2              py38haa95532_2
 
 
 ## 作る手順メモ
-まずSpotifyにログインし、Spotify for Developersの[Dashboard](https://developer.spotify.com/dashboard/login)にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
+### Spotify
+
+- Spotifyにログイン
+
+まずSpotifyにログインし、Spotify for Developersの[Dashboard][spotify-dashboard]にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
 なお `Client ID` と "SHOW CLIENT SECRET" クリックで表示される `Client Secret` は後で必要になる。晒すとヤバそう。
 
 折角なのでGitHubを使う。GitHub Desktopを起動して（ローカル？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
@@ -122,3 +126,4 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [^6]: commitとかに含めないファイルやフォルダを指定するやつ。  
 [^7]: 書き方は[.gitignore の書き方](https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff)とか[[Git] .gitignoreの仕様詳解](https://qiita.com/anqooqie/items/110957797b3d5280c44f)とかに。  
 [^8]: [python-dotenv公式ドキュメント](https://pypi.org/project/python-dotenv/)
+[spotify-dashboard]: https://developer.spotify.com/dashboard/
