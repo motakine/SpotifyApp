@@ -117,6 +117,9 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked Songsをシェアする方法はない。アクセスする方法はなさそう？  
 あるいはsaved_tracks関連でいける？
 
+[Bolt for Python][bolt-python]
+
+<!-- Markdown links -->
 
 [^1]: [Spotipy公式ドキュメント](https://spotipy.readthedocs.io/en/2.19.0/)  
 [^2]: [twilio BLOG: Pythonで環境変数を活用する](https://www.twilio.com/blog/environment-variables-python-jp)  
@@ -127,3 +130,4 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [^7]: 書き方は[.gitignore の書き方](https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff)とか[[Git] .gitignoreの仕様詳解](https://qiita.com/anqooqie/items/110957797b3d5280c44f)とかに。  
 [^8]: [python-dotenv公式ドキュメント](https://pypi.org/project/python-dotenv/)
 [spotify-dashboard]: https://developer.spotify.com/dashboard/
+[bolt-python]: https://github.com/slackapi/bolt-python
