@@ -54,7 +54,7 @@ wincertstore              0.2              py38haa95532_2
 
 - Spotifyにログイン
 
-まずSpotifyにログインし、Spotify for Developersの[Dashboard][spotify-dashboard]にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
+まずSpotifyにログインし、Spotify for Developersの [Dashboard][spotify-dashboard] にもSpotifyアカウントを使ってログインする。次に `CREATE AN APP` からアプリを作成する。  
 なお `Client ID` と "SHOW CLIENT SECRET" クリックで表示される `Client Secret` は後で必要になる。晒すとヤバそう。
 
 折角なのでGitHubを使う。GitHub Desktopを起動して（ローカル？）リポジトリを作成。選択したローカルフォルダ直下に指定したリポジトリ名（今回はSpotifyApp）のフォルダができるらしい。README.mdはつけて `.gitignore` もPythonを選択。ライセンスはまあ後でええやろ。
