@@ -3,6 +3,7 @@ from slack_sdk import WebClient
 
 
 class SlackSdk:
+  """slack_sdkを使ったSlack Botのクラス"""
   def __init__(self, is_debug=True):
     if is_debug:
       # デバッグレベルのログを出力
@@ -13,7 +14,24 @@ class SlackSdk:
     # 投稿するチャンネル
     self.channel = '#motakine-lab'
 
-  def post_message(self):
+
+  def post_a_message(self, text):
+    response = self.client.chat_postMessage(
+      channel=self.channel,
+      text=text
+    )
+
+
+  def post_a_song(self, song):
+    artist = song['artist']
+    title = song['title']
+    spotify_url = song['spotify_url']
+    text_spotify = f'{artist} - {title}' + '\n' + spotify_url
+
+    self.post_a_message('キミが今日紹介するべき曲はこれにゃのだよ' + '\n\n' + text_spotify)
+
+
+  def post_input_messages(self):
     # chat.postMessage API を呼び出す
     response = self.client.chat_postMessage(
       channel=self.channel,
@@ -27,13 +45,9 @@ class SlackSdk:
         text=text,
       )
 
-  def post_a_song(self, song):
-    artist = song['artist']
-    title = song['title']
-    spotify_url = song['spotify_url']
-    text_spotify = f'{artist} - {title}' + '\n' + spotify_url
 
-    response = self.client.chat_postMessage(
-      channel=self.channel,
-      text='キミが今日紹介するべき曲はこれにゃのだよ' + '\n\n' + text_spotify,
-    )
+class SlackBolt:
+  """slack-boltを使ったSlack Botのクラス"""
+  pass
+
+

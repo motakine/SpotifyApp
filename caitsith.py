@@ -14,6 +14,7 @@ class CaitSith:
 
     self.next_song = self.get_next_song()
     self.slack_bot = slack_bot.SlackSdk(is_debug)
+    # self.twitter_bot = twitter_bot.TwitterBot()
 
   def get_next_song(self):
     """自分のSpotifyアカウントのLiked Songsから1曲ランダムに取得して情報を返す。重複なし。
@@ -27,3 +28,4 @@ class CaitSith:
 if __name__ == "__main__":
   caitsith = CaitSith(False)
   caitsith.slack_bot.post_a_song(caitsith.next_song)
+  # caitsith.twitter_bot.something()

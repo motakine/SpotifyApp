@@ -59,6 +59,24 @@ wincertstore              0.2              py38haa95532_2
 結果：現ユーザのLiked Songsの内容が列挙される。
 
 
+## 自分用メモ
+### 公式系
+
+- [Spotify for Developers Dashboard][spotify-dev-dashboard]
+- [Slack Your Apps][slack-apps]
+- [Twitter Developer Apps][twitter-apps]
+- [Heroku][heroku]
+
+### ドキュメント系
+
+- [Spotipy Documentation][spotipy-documents]
+- [slack-boltのガイド？][slack-bolt-python-guides]
+- [Boltでアプリを作る][slack-build-app-with-bolt]
+- [Slackでリッチなテキストを書く][slack-rich-message]
+- [Tweepy Documentation][tweepy-documents]
+- [Tweepy日本語ドキュメント（古い）][tweepy-documents-ja-old]
+
+
 ## 作り方メモ
 ### Spotify
 
@@ -123,6 +141,7 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 
 [Spotify for Developers Dashboard][spotify-dev-dashboard]のアプリの `Client ID`, `Client Secret`, `Redirect URI` を `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` として通しておく。これにより認証の際にこれらを引数に渡す手間が省ける。
 - `SPOTIFY_XXX_XXX` でないことに注意。すぽてぃぱい。
+- `SPOTIPY_REDIRECT_URI` はとりあえず `http://localhost:8888/callback` を指定している。
 
 #### 環境変数：Slack
 
@@ -139,40 +158,14 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 
 Spotify Web APIの動作・必要scopeの確認には[Spotify for Developers Console][spotify-dev-console]が便利。返り値も確認できる。
 
-## Spotipyメモ
-
-公式ドキュメントの翻訳とかやが…
-
-すべてのメソッドはユーザ認証必須なので、Dashboardから認証情報を得ておく必要がある。
-
-認証の流れは2つある。
-
-- **Authorization Code flow** は、ユーザーが一度ログインするだけの長時間稼働のアプリケーションに適しています。アクセストークンを提供し、それをリフレッシュすることができます。
-  - Dashboardでredirect URIを追加しておく必要がある。
-- **Client Credentials flow** により、Spotify Web APIへのリクエストを認証し、Authorization Codeフローよりも高いレート制限を得ることが可能になります。
-
-
-### Authorization Code Flow
-
-このフローは、ユーザーが一度だけ許可を与えるような長時間稼働のアプリケーションに適しています。このフローでは、リフレッシュ可能なアクセストークンを提供します。トークンの交換には秘密鍵の送信を伴うため、ブラウザやモバイルアプリなどのクライアントからではなく、バックエンドサービスなどの安全な場所で実行してください。
-
-`SpotifyOAuth`クラスを使う。Redirect URIは `http://localhost:8888/callback` とかを指定しておけばよい？
-
-で現在のユーザの保存した曲のリストを取得したり色々する際にOAuth Tokenの適切なscopeをリクエストする必要がある（scopeが足りないと想定する動作が許されなかったりする）が、その確認には[Spotify for DevelopersのConsoleページ](https://developer.spotify.com/console/)がおすすめ。何をすれば何が返ってくるのかの確認もできる。
-
-### Client Credentials Flow
-
-Client Credentialsフローは、サーバー間認証で使用されます。ユーザー情報にアクセスしないエンドポイントのみがアクセスできます。アクセストークンを使用しないWeb APIへのリクエストと比較して、より高いレート制限が適用されるという利点があります。
-
-`SpotifyClientCredentials` クラスを使う。ユーザ情報へのアクセスはできない。Redirect URIは不要。
-
 
 ## その他メモ
 
+[一番分かりやすい OAuth の説明](https://qiita.com/TakahikoKawasaki/items/e37caf50776e00e733be)とかいうQiitaの記事がある。SlackやTwitterのbotを作るときの参考の参考くらいに。
+
 [Pythonスクリプトをexe化する](https://www.python.ambitious-engineer.com/archives/3306)という記事がある。
 
-[これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked Songsをシェアする方法はない。アクセスする方法はなさそう？  
-あるいはsaved_tracks関連でいける？
+[これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked SongsをSpotifyでシェアする方法はない。
 
 
 <!-- Markdown links -->
@@ -183,14 +176,20 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [github-writing-markdown]: https://gist.github.com/LambdaNote/0d33b7d8284a3c99cffd1a5aa83c115f "GitHub: 記事の書き方"
 [gitignore-qiita-1]: https://qiita.com/inabe49/items/16ee3d9d1ce68daa9fff "Qiita: .gitignore の書き方"
 [gitignore-qiita-2]: https://qiita.com/anqooqie/items/110957797b3d5280c44f "Qiita: [Git] .gitignoreの仕様解説"
+[heroku]: https://www.heroku.com/ "Heroku"
 [python-environment-variable]: https://www.twilio.com/blog/environment-variables-python-jp "twilio BLOG: Pythonで環境変数を活用する"
 [python-dotenv-documents]: https://pypi.org/project/python-dotenv/ "python-dotenv 公式ドキュメント"
 [slack-apps]: https://api.slack.com/apps "Slack: Your Apps"
+[slack-bolt-python-guides]: https://slack.dev/bolt-python/ja-jp/tutorial/getting-started "Slack: Bolt for Pythonガイド"
+[slack-build-app-with-bolt]: https://api.slack.com/start/building/bolt-python "Building an app with Bolt for Python"
+[slack-rich-message]: https://api.slack.com/messaging/composing/layouts "Creating rich message layouts"
 [spotify]: https://www.spotify.com/ "Spotify"
 [spotify-dev-console]: https://developer.spotify.com/console/ "Spotify for Developer Console"
 [spotify-dev-dashboard]: https://developer.spotify.com/dashboard/ "Spotify for Developer Dashboard"
 [spotify-webapi-tutorial]: https://developer.spotify.com/documentation/web-api/quick-start/ "Spotify Web API Tutorial"
 [spotipy-documents]: https://spotipy.readthedocs.io/en/2.19.0/ "Spotipy 公式ドキュメント"
+[tweepy-documents]: https://docs.tweepy.org/en/latest/index.html "Tweepy Documentation"
+[tweepy-documents-ja-old]: https://kurozumi.github.io/tweepy/index.html "Tweepyドキュメント(v3.6.0)"
 [twitter-apps]: https://developer.twitter.com/en/apps/ "Twitter Developer Apps"
 
 [naming-convention-cases-upper-snake]: https://qiita.com/terra_yucco/items/ec437c6005932fd73fb9#%E3%82%A2%E3%83%83%E3%83%91%E3%83%BC%E3%82%B9%E3%83%8D%E3%83%BC%E3%82%AF%E3%82%B1%E3%83%BC%E3%82%B9--upper-snake-case
