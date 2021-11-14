@@ -37,4 +37,3 @@ class SlackSdk:
       channel=self.channel,
       text='キミが今日紹介するべき曲はこれにゃのだよ' + '\n\n' + text_spotify,
     )
-

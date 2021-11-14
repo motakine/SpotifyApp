@@ -44,6 +44,7 @@ slack-bolt                1.10.0                   pypi_0    pypi
 slack-sdk                 3.11.2                   pypi_0    pypi
 spotipy                   2.19.0                   pypi_0    pypi
 sqlite                    3.36.0               h2bbff1b_0
+tweepy                    4.3.0                    pypi_0    pypi
 twitterapi                2.7.7                    pypi_0    pypi
 urllib3                   1.26.7                   pypi_0    pypi
 vc                        14.2                 h21ff451_1
@@ -68,11 +69,24 @@ wincertstore              0.2              py38haa95532_2
 
 ### Slack
 
-Slackへの投稿を利用しないならこの項は不要。
+Slackへの投稿を利用しないならこの項は不要。また手順は将来変更される可能性も。
+
+Slack APIの[Your Apps][slack-apps]から `Create New App` でアプリを作成する。 `app Manifest` が何かわからないならとりあえず `From scratch` を選択して後から権限などの設定を行えばよい。アプリの名前と使用するWorkspaceを入力して `Create App` 。
+
+- Settings > App Manifestからアプリの説明や権限などの追加が行える。上部の `View Documentation` で調べながら頑張る。
+- Settings > Incoming WebhooksからIncoming Webhooksの設定を行いそう。
+- Settings > OAuth & Permissionsから `Bot User OAuth Token` などの確認が行える。
+- 必要な権限とかは頑張って調べて頑張る。
 
 ### Twitter
 
-Twitterへの投稿を利用しないならこの項は不要。
+Twitterへの投稿を利用しないならこの項は不要。また手順は将来変更される可能性も。
+
+投稿に利用したいTwitterアカウントの携帯電話番号の登録を済ませておき、[Twitter Developer Appsみたいなやつ][twitter-apps]にアクセスして `Create an app` をクリック。大体でよいのでAPIの使用目的などを入力（英語あり）し、審査が終わるとTokenなどが表示されるので控えを取る。Developer PortalのProject画面にあるAppの鍵マークから `Access Token` などを生成してこれも控えを取る。
+
+- 普段使っているものとは別のアカウントでツイートしたい場合は新しくTwitterアカウントを作成する。電話番号は普段使っているものと同じ番号を使用してよい。
+- Token系は一度しか表示されず、忘れた場合はRegenerateを行う必要がある。
+- ProjectやApp Detailsの編集は少し時間が経つと行えるようになる？（鉛筆マーク）
 
 ### GitHub Desktop
 
@@ -94,7 +108,8 @@ Python3.8とかの新しい仮想環境を作成し、適宜パッケージを�
 - `pip install spotipy --upgrade`：Spotify Web APIの利用
 - `pip install python-dotenv`：環境変数の使用。[参考][python-environment-variable]、[公式ドキュメント][python-dotenv-documents]。
 - `pip install slack-bolt`：2021年現在新しめのslackbot等パッケージ。 `slack-sdk` も同時にインストールされる
-- `pip install TwitterAPI`：Twitter APIの利用
+- `pip install TwitterAPI`：Twitter APIの利用（いらないかも）
+- `pip install tweepy`：Twitter APIのラッパー？
 
 ### Visual Studio Code
 Pythonのコードを実行するにはまず `.py` ファイルを作成し、左下の `Python x.x.xx 64-bit ('hogehoge': conda)` という箇所をクリックして仮想環境を選択する。あとはF5を押すとDebug Configurationが出てくるが、そのままEnterを押せば `Python File` として実行される。
@@ -106,12 +121,19 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 
 #### 環境変数：Spotipy
 
-Spotify for Developers Dashboardのアプリの `Client ID`, `Client Secret`, `Redirect URI` を `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` として通しておく。これにより認証の際にこれらを引数に渡す手間が省ける。
+[Spotify for Developers Dashboard][spotify-dev-dashboard]のアプリの `Client ID`, `Client Secret`, `Redirect URI` を `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` として通しておく。これにより認証の際にこれらを引数に渡す手間が省ける。
 - `SPOTIFY_XXX_XXX` でないことに注意。すぽてぃぱい。
 
 #### 環境変数：Slack
 
-aaaa
+[Slackアプリ][slack-apps]から選択したアプリの `OAuth & Permissions` に `Bot User OAuth Token` があったのでそれを `SLACK_BOT_TOKEN` とか適当に通す。
+
+#### 環境変数：Twitter
+
+アプリ作成などに控えを取っていた各種トークン、 `API Key`, `API Key Secret`, `Bearer Token`, `Access Token`, `Access Token Secret` を各々適当に `TWITTER_` とかを頭につけて[アッパースネークケース][naming-convention-cases-upper-snake]とかで通す。
+
+- `API Key`, `API Key Secret` はかつて `Consumer Key`, `Consumer Secret` と呼ばれていた模様。古い記事だとそちらの表記になっている。
+- トークンを忘れたり `Access` 系のgenerateを忘れていたりした場合は、[Developer Portal][twitter-apps]（既にアプリを作成した場合）の該当プロジェクトの下の方にある "Apps" の該当アプリの右側にある鍵マークからRegenerateやGenerateが行える（確認はできない）。
 
 ### その他
 
@@ -163,8 +185,12 @@ Client Credentialsフローは、サーバー間認証で使用されます。�
 [gitignore-qiita-2]: https://qiita.com/anqooqie/items/110957797b3d5280c44f "Qiita: [Git] .gitignoreの仕様解説"
 [python-environment-variable]: https://www.twilio.com/blog/environment-variables-python-jp "twilio BLOG: Pythonで環境変数を活用する"
 [python-dotenv-documents]: https://pypi.org/project/python-dotenv/ "python-dotenv 公式ドキュメント"
+[slack-apps]: https://api.slack.com/apps "Slack: Your Apps"
 [spotify]: https://www.spotify.com/ "Spotify"
 [spotify-dev-console]: https://developer.spotify.com/console/ "Spotify for Developer Console"
 [spotify-dev-dashboard]: https://developer.spotify.com/dashboard/ "Spotify for Developer Dashboard"
 [spotify-webapi-tutorial]: https://developer.spotify.com/documentation/web-api/quick-start/ "Spotify Web API Tutorial"
 [spotipy-documents]: https://spotipy.readthedocs.io/en/2.19.0/ "Spotipy 公式ドキュメント"
+[twitter-apps]: https://developer.twitter.com/en/apps/ "Twitter Developer Apps"
+
+[naming-convention-cases-upper-snake]: https://qiita.com/terra_yucco/items/ec437c6005932fd73fb9#%E3%82%A2%E3%83%83%E3%83%91%E3%83%BC%E3%82%B9%E3%83%8D%E3%83%BC%E3%82%AF%E3%82%B1%E3%83%BC%E3%82%B9--upper-snake-case

@@ -4,6 +4,7 @@ import json
 
 import spotify_info
 import slack_bot
+import twitter_bot
 
 class CaitSith:
   def __init__(self, is_debug=True):
