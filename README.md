@@ -54,9 +54,13 @@ wincertstore              0.2              py38haa95532_2
 ```
 
 ## 使い方
-後述の `Client ID` と `Client Secret` を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行する。
+環境変数を `.env.example` のノリで `.env` ファイルに記述し、上述の環境を用意して `caitsith.py` を実行する。
 
-結果：現ユーザのLiked Songsの内容が列挙される。
+そして下のやつを見ていい感じにやる。
+
+ドライブ上にも何かjsonファイルが必要そう。
+
+結果：現SpotifyユーザのLiked Songsの中から一つをランダムに選び、SlackとTwitterで自分に対して曲の紹介を要求するメンションが飛んでくる。
 
 
 ## 自分用メモ
@@ -201,6 +205,10 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 - どのような環境変数を用いているかを公開したい場合は、 `.env.example` などといったファイルに `.env` の内容を（**実際の値は伏せて**）記述すればよい。
 - 実際にPythonコード内で `.env` の内容を環境変数として扱いたい場合は、 `python-dotenv` の関数 `load_dotenv()` を呼び出す。
 
+#### 環境変数：アプリ
+
+アプリで使用するコンフィグファイル、SpotifyのLiked Songsを格納するファイル、これまで選択した曲を格納するファイルの名前を環境変数にブチ込む。
+
 #### 環境変数：Spotipy
 
 [Spotify for Developers Dashboard][spotify-dev-dashboard]のアプリの `Client ID`, `Client Secret`, `Redirect URI` を `SPOTIPY_CLIENT_ID`, `SPOTIPY_CLIENT_SECRET`, `SPOTIPY_REDIRECT_URI` として通しておく。これにより認証の際にこれらを引数に渡す手間が省ける。
@@ -218,9 +226,20 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 - `API Key`, `API Key Secret` はかつて `Consumer Key`, `Consumer Secret` と呼ばれていた模様。古い記事だとそちらの表記になっている。
 - トークンを忘れたり `Access` 系のgenerateを忘れていたりした場合は、[Developer Portal][twitter-apps]（既にアプリを作成した場合）の該当プロジェクトの下の方にある "Apps" の該当アプリの右側にある鍵マークからRegenerateやGenerateが行える（確認はできない）。
 
+#### 環境変数：Google Drive API
+`credentials.json` あるいは `client_secret.json` と `token.json` の内容をそれぞれ `GOOGLE_CLIENT_SECRET_JSON`, `GOOGLE_TOKEN_JSON` にブチ込む。詳細は上のやつを見てください。
+
+### Heroku
+
+アカウントを作成し、アプリを作成し、何かPythonを設定して色々やる。詳しくは[こっちのリポジトリ](https://github.com/motakine/SlackBolt)に書いてあるからそれ読んで。
+
+
+
 ### その他
 
 Spotify Web APIの動作・必要scopeの確認には[Spotify for Developers Console][spotify-dev-console]が便利。返り値も確認できる。
+
+configとかのjsonファイルのローカルでの保存場所をjsonフォルダ以下にしようと思ったけどGoogle Driveでも同じパスを指定してたせいでエラーが出て面倒になったので断念。
 
 
 ## その他メモ
@@ -231,6 +250,9 @@ Spotify Web APIの動作・必要scopeの確認には[Spotify for Developers Con
 
 [これ](https://community.spotify.com/t5/Your-Library/How-to-share-the-quot-Liked-Songs-quot-Playlist/td-p/4828788)によると、Liked SongsをSpotifyでシェアする方法はない。
 
+[Python命名規則一覧](https://qiita.com/naomi7325/items/4eb1d2a40277361e898b)
+
+Pythonの日付操作は[ここ](https://qiita.com/papi_tokei/items/43b1d15a6694f576486c)[らへ](https://note.nkmk.me/python-datetime-now-today/)[ん](https://note.nkmk.me/python-datetime-usage/)とかを参照。比較は[ここ](https://qiita.com/Alice1017/items/4ce5be3f46aa34f9f900)。
 
 <!-- Markdown links -->
 
