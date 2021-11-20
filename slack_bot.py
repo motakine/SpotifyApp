@@ -12,7 +12,7 @@ class SlackSdk:
     # Web API クライアントを初期化
     self.client = WebClient(os.environ["SLACK_BOT_TOKEN"])
     # 投稿するチャンネル
-    self.channel = '#motakine-lab'
+    self.channel = '#motakine-lab' if is_debug else '#motakineめっも'
 
 
   def post_a_message(self, text):

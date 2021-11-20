@@ -106,6 +106,68 @@ Twitterへの投稿を利用しないならこの項は不要。また手順は�
 - Token系は一度しか表示されず、忘れた場合はRegenerateを行う必要がある。
 - ProjectやApp Detailsの編集は少し時間が経つと行えるようになる？（鉛筆マーク）
 
+
+### Google Drive API
+
+設定ファイルをGoogle Driveに保存し、Herokuアプリからアクセスするために使用している。ローカルで運用するなら不要。
+
+色々調べたが、結局[Googleの公式QuickStart](https://developers.google.com/drive/api/v3/quickstart/python)をベースにやることになった。
+
+- PyDrive2だと設定ファイルをGitHub上で公開せずに済む方法が見つからなかった。
+- PyDrive2の依存関係に含まれていない `google-auth-oauthlib` の中の関数を使う方法でやることにする。
+
+まずPrerequisitesその1として、[プロジェクトを作成してAPIを有効化](https://developers.google.com/workspace/guides/create-project)する。
+
+- [Google Developers Console](https://console.developers.google.com/)にアクセスし、左メニューの「APIとサービス」>「ダッシュボード」を選択してプロジェクトを作成する。
+- ダッシュボード上側の「APIとサービスの有効化」をクリックし、Google Drive APIを検索するなりして見つけて有効化する。
+
+次にPrerequisitesその2として、[認証情報の作成](https://developers.google.com/workspace/guides/create-credentials)を行う。
+
+- ここでは認証情報の作成に「OAuthクライアントID」を使用するので、OAuth 同意画面の作成が必要になり、そちらを先に行う。設定は「APIとサービス」>「OAuth 同意画面」から。
+  - まずUser Typeの選択の画面になるが、Google Workspaceユーザでないと `内部` は選択できず、 `外部` を選択することになる。 `作成` を押す。
+  - アプリ登録の編集のOAuth同意画面の設定が表示されるので、必須のアプリ名やメールアドレス、メールアドレスを入力。
+  - 次にスコープの画面になるが、これは無視して良さそう。設定するなら[これ](https://developers.google.com/workspace/guides/identify-scopes)を参考に。
+  - テストユーザーは、恐らくサービスアカウントを使用しないのであればここに登録したユーザーのみが使えるとかだと思う。今はまだ使っていない。
+- 「APIとサービス」>「認証情報」から「認証情報を作成」を選択。ここでは「OAuthクライアントID」を使用。
+  - アプリケーションの種類は、公式QuickStartに準じて「デスクトップアプリ」を選択。
+  - 「クライアント ID」と「クライアント シークレット」が表示されるので控えをとっておく。
+  - あるいはjsonファイルをダウンロードし、QuickStartに従って `client_secret_XXXXXX....json` から `credentials.json` にリネームする。 `client_secret.json` でもよいがその場合コード中の文字列もこちらに変更しておくこと。
+
+[QuickStart](https://developers.google.com/drive/api/v3/quickstart/python)を行う。必要なライブラリをインストールし、 `quickstart.py` を作成してコードをコピーして実行する。
+
+- `pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`
+- 自分の環境では既に `pip install PyDrive2` を行っており、新たにインストールされたのは `google-auth-oauthlib` のみだった。
+- コード実行の際、初期状態（ `token.json` が存在しない状態）ではブラウザが開いて同意画面が表示される。
+
+このコードを `google_drive.py` かなんかにコピーして改造していくが、まず必要なトークンの入手を行う。
+
+- まず `SCOPES` を変更して `token.json` を削除してからコードを実行し、同意画面の表示と新しい `token.json` の入手を済ませておく。
+- スコープについて、[Drive API (V3)のドキュメント](https://developers.google.com/drive/api/v3/about-auth)によると `https://www.googleapis.com/auth/drive.appdata` で `Application Data folder` というアプリ固有のフォルダ内のファイルにフルアクセスできるらしい。通常は設定ファイルなどをここに置く。
+  - しかしどうやらユーザーからは見られない模様（[参考](https://stackoverflow.com/questions/22832104/how-can-i-see-hidden-app-data-in-google-drive)）。一応確認などのためにLiked Songsとかのファイルはユーザーから見られるようにしておきたいので断念。
+- 結局全ドライブファイルにアクセスできる `https://www.googleapis.com/auth/drive` を使用することにした。
+
+そして `credentials.json` (`client_secret.json`) や `token.json` といったトークン情報が入ったファイルをGitHub上に公開しないように、コードを改変していく。
+
+- リネームした `credentials.json` と `token.json` の中身を **そのまま環境変数にブチ込む** 。[参考](https://qiita.com/yume_yu/items/171b04fb81dd67604683)
+  - キーは適当に `GOOGLE_CLIENT_SECRET_JSON` と `GOOGLE_TOKEN_JSON` とかで。
+- Pythonコードで `import os, json` と `from dotenv import load_dotenv` して `load_dotenv()` する。
+  - でも `load_dotenv()` ってHeroku上のプログラムにはいらなくね？まあええか
+- また、 `Credentials.from_authorized_user_file` を `Credentials.from_authorized_user_info` に、 `InstalledAppFlow.from_client_secrets_file` を `InstalledAppFlow.from_client_config` に変更し、jsonファイルの代わりに `os.environ['環境変数のキー']` を `json.loads()` に突っ込んだものを第一引数としておく。第二引数は元の関数と同じく `SCOPES` でよい。
+- `token.json` ファイルの存在確認を、 `os.environ` 辞書における `GOOGLE_TOKEN_JSON` キーの存在確認に変更。
+- また、 `token.json` ファイルを保存するところを `os.environ['GOOGLE_TOKEN_JSON']` に `creds.to_json()` を代入するものに直しておく。
+  - 但しこれが意味のあるコードなのかは不明（プログラム中の環境変数への変更はそのプログラム中においてのみ有効らしい：[参考](https://note.nkmk.me/python-os-environ-getenv/))）。
+
+ここからはAPIの動作を実装する。この時サービス動作のコードを別メソッドに分離しておくとやりやすいかもしれない。
+
+- 必要なメソッドとかはGoogle Drive for Developersの[Drive API (V3)](https://developers.google.com/drive/api/v3/about-files)の該当箇所とかを見てくれ
+  - あるいは[ここ](https://zenn.dev/wtkn25/articles/python-googledriveapi-operation)とかちょっと分かりやすいか？
+- なおダウンロード/アップロードには `from googleapiclient.http import MediaIoBaseDownload` `from googleapiclient.http import MediaFileUpload` が必要なので注意。公式ドキュメントには書かれていない。
+- なおドライブからのダウンロードについては[これ](https://udon.little-pear.net/python-google-drive-api/#reference1)を見よう。公式だとできなかった。
+
+
+[参考](https://news.mynavi.jp/article/zeropython-16/)
+
+
 ### GitHub Desktop
 
 ダウンロードは[こちら][github-desktop]、ドキュメントは[こちら][github-desktop-documents]。

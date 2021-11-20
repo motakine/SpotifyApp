@@ -26,6 +26,6 @@ class CaitSith:
 
 
 if __name__ == "__main__":
-  caitsith = CaitSith(False)
+  caitsith = CaitSith(is_debug=False)
   caitsith.slack_bot.post_a_song(caitsith.next_song)
   # caitsith.twitter_bot.something()
