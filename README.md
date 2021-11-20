@@ -105,6 +105,8 @@ Twitterへの投稿を利用しないならこの項は不要。また手順は�
 - 普段使っているものとは別のアカウントでツイートしたい場合は新しくTwitterアカウントを作成する。電話番号は普段使っているものと同じ番号を使用してよい。
 - Token系は一度しか表示されず、忘れた場合はRegenerateを行う必要がある。
 - ProjectやApp Detailsの編集は少し時間が経つと行えるようになる？（鉛筆マーク）
+- Tweetを行いたい場合はアプリのSettingから `App permissions` を `Read` から `Read and write` にする必要がありそう。
+  - 各種トークンのRegenerateも忘れないこと。
 
 
 ### Google Drive API

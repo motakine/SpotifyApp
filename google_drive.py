@@ -19,14 +19,20 @@ class GoogleDrive:
   """Google Drive APIのクラス。基本的にドライブ上のファイルの重複はないものとして実装している。
   """
   def __init__(self):
+    """コンストラクタ。
+    """
     self.service = build('drive', 'v3', credentials=self.Create_credentials())
-    """Drive上のファイル操作などに使用するサービス"""
+    """Drive上のファイル操作などに使用するサービス
+    """
     self.APP_DATA_FOLDER = '.appdata'
-    """アプリのデータを格納するフォルダの名前"""
+    """アプリのデータを格納するフォルダの名前
+    """
     self.MIMETYPES = { 'folder': 'application/vnd.google-apps.folder', 'json': 'application/json' }
-    """mimeTypeの辞書（間違えやすいので）"""
+    """mimeTypeの辞書（間違えやすいので）
+    """
     self.APP_DATA_FOLDER_ID = self.App_Data_Folder_ID()
-    """アプリのデータを格納するフォルダのID"""
+    """アプリのデータを格納するフォルダのID
+    """
 
 
   def Update_File(self, filename):
@@ -38,7 +44,7 @@ class GoogleDrive:
         filename (str): アップロードするjsonファイルのファイル名（拡張子含む）
     
     Returns:
-        file: 'id' が入っている。file.get('id')などで取得可能。
+        file: 'id' と 'name' が入っている。file.get('id')などで取得可能。
     """
     file_old = self.Search_a_file_from_Appdir(filename)
     file = self.Upload_File(filename)
@@ -49,7 +55,7 @@ class GoogleDrive:
       return file
     
     self.Delete_File(file_old.get('id'))
-    print(f"The file of Drive is updated.\n  (name, ID) is: ({filename}, {file.get('id')})")
+    print(f"The file of Drive is updated.\n  (name, ID) is: {file.get('name'), file.get('id')}")
     return file
 
 
@@ -60,7 +66,7 @@ class GoogleDrive:
         filename (str): アップロードするファイルのファイル名（拡張子含む）
 
     Returns:
-        file: 'id' が入っている。file.get('id')などで取得可能。
+        file: 'id' と 'name' が入っている。file.get('id')などで取得可能。
     """
     file_metadata = {
       'name': filename,
@@ -71,10 +77,10 @@ class GoogleDrive:
       filename, resumable=True
     )
     file = self.service.files().create(
-      body=file_metadata, media_body=media, fields='id'
+      body=file_metadata, media_body=media, fields='name, id'
     ).execute()
 
-    print(f"The file uploaded.\n  (name, ID) is: ({filename}, {file.get('id')})")
+    print(f"The file uploaded.\n  (name, ID) is: {file.get('name'), file.get('id')}")
     return file
 
 
@@ -84,13 +90,17 @@ class GoogleDrive:
     Args:
         filename (str): ダウンロードするファイルのファイル名（拡張子含む）
         output_dir (str): 出力フォルダのパス
+    
+    Returns:
+        bool: ダウンロードに成功した場合True、ファイルが存在しないなどで失敗した場合False。
     """
     file = self.Search_a_file_from_Appdir(filename)
     if file == None:
       print("The file you requested is not found.")
-      return
+      return False
     
     self.Download_File(file.get('id'), filename, output_dir)
+    return True
   
 
   def Download_File(self, file_id, filename, output_dir='.'):
@@ -102,7 +112,7 @@ class GoogleDrive:
         output_dir (str): 出力フォルダのパス
     """
     request = self.service.files().get_media(fileId=file_id)
-    print(f"The file is being downloaded...\n  (name, ID) is: ({filename}, {file_id})")
+    print(f"The file is being downloaded...\n  (name, ID) is: {filename, file_id}")
     with open(os.path.join(output_dir, filename), 'wb') as f:
       downloader = MediaIoBaseDownload(f, request)
       done = False
@@ -136,8 +146,8 @@ class GoogleDrive:
     # 存在しなければ作成
     if (folder == None):
       file_metadata = { 'name': self.APP_DATA_FOLDER, 'mimeType': self.MIMETYPES['folder'] }
-      folder = self.service.files().create(body=file_metadata, fields='id').execute()
-    print(f"Got the folder this app uses.\n  ID is: {folder.get('id')}")
+      folder = self.service.files().create(body=file_metadata, fields='id, name').execute()
+    print(f"Got the folder this app uses.\n  (name, ID) is: {folder.get('name'), folder.get('id')}")
     return folder.get('id')
 
 
@@ -185,7 +195,7 @@ class GoogleDrive:
 
       for file in response.get('files', []):
         # Process change
-        print(f"Found a searched file!\n  (name, ID) is: ({file.get('name')}, {file.get('id')})")
+        print(f"Found a searched file!\n  (name, ID) is: {file.get('name'), file.get('id')}")
         return file
 
       page_token = response.get('nextPageToken', None)
@@ -236,23 +246,23 @@ class GoogleDrive:
 
 DATETIME_FORMAT = '%Y/%m/%d %H:%M:%S'
 
-# def something_json(filename):
-#   """jsonファイルに対してなんかやる
+def something_json(filename):
+  """jsonファイルに対してなんかやる
 
-#   Args:
-#       filename (str): jsonファイルのファイル名
-#   """
-#   with open(filename, 'r', encoding='utf-8') as f:
-#     json_dict = json.load(f)
+  Args:
+      filename (str): jsonファイルのファイル名
+  """
+  with open(filename, 'r', encoding='utf-8') as f:
+    json_dict = json.load(f)
   
-#   date_str = json_dict.get('last_updated')
-#   date_dt = datetime.datetime.strptime(date_str, DATETIME_FORMAT)
-#   print(date_dt)
-#   dt_now_jst = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
-#   json_dict['last_updated'] = dt_now_jst.strftime(DATETIME_FORMAT)
+  date_str = json_dict.get('last_updated')
+  date_dt = datetime.datetime.strptime(date_str, DATETIME_FORMAT)
+  print(date_dt)
+  dt_now_jst = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+  json_dict['last_updated'] = dt_now_jst.strftime(DATETIME_FORMAT)
 
-#   with open(filename, 'w', encoding='utf-8') as f:
-#     json.dump(json_dict, f, ensure_ascii=False, indent=4, sort_keys=True)
+  with open(filename, 'w', encoding='utf-8') as f:
+    json.dump(json_dict, f, ensure_ascii=False, indent=4, sort_keys=True)
 
 
 
@@ -264,6 +274,6 @@ if __name__ == '__main__':
   filename = 'config.json'
   drive.Download_File_from_Appdir(filename)
   # 何らかのjsonファイルに対する処理
-  # something_json(filename)
+  something_json(filename)
   drive.Update_File(filename)
 
