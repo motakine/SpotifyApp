@@ -233,6 +233,12 @@ Pythonのコードを実行するにはまず `.py` ファイルを作成し、�
 
 アカウントを作成し、アプリを作成し、何かPythonを設定して色々やる。詳しくは[こっちのリポジトリ](https://github.com/motakine/SlackBolt)に書いてあるからそれ読んで。
 
+加えてこのアプリでは定期実行を行いたいのでその設定を行う。[参考](https://qiita.com/pythonista/items/2eab3e3acad88c5b759e)
+- アプリのダッシュボードの `Resources` から `Find more add-ons` を選択するか直下の検索フォームから `Heroku Scheduler` を選ぶ。
+- `Plan name` が `Standard - Free` であることを確認し、 `Provision` を押下。 `Submit Order Form` かもしれない。
+- 追加された `Heroku Schedular` から管理画面を開き、初なら `Create job` 、経験済みなら `Add Job` からスケジューリングを行う。
+  - 10分毎、1時間毎（開始時刻は10分刻み）、1日毎（開始時刻は30分刻み）から間隔を設定、実行コマンドも設定。
+- `Save job` でスケジュールが作成される。
 
 
 ### その他
