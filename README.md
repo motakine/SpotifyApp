@@ -112,6 +112,7 @@ Twitterへの投稿を利用しないならこの項は不要。また手順は�
 - Tweetを行いたい場合はアプリのSettingから `App permissions` を `Read` から `Read and write` にする必要がありそう。
   - 各種トークンのRegenerateも忘れないこと。
 
+また、Twitterの自動システムのスパム誤認によるAPI凍結を食らうこともある。その場合はサポートから何か送りましょう。
 
 ### Google Drive API
 
