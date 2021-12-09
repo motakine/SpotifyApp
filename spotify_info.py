@@ -50,6 +50,7 @@ class SpotifyInfo:
 
     # Spotify APIで取得したLiked Songsの曲数との食い違いがなければ更新をせずに終了する。
     total = results['total']
+    print(f'total == saved_number_of_songs = {total == saved_number_of_songs}')
     if total == saved_number_of_songs:
       return False
     
@@ -69,8 +70,6 @@ class SpotifyInfo:
         })
       offset += limit
     
-    print('Spotify: next is sort')
-
     # Liked Songsを昇順ソートして保存する。
     self.json_data.sort_liked_songs()
     self.json_data.save_json_file_liked_songs()
