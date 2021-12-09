@@ -42,7 +42,9 @@ class SpotifyInfo:
         bool: 更新を行ったかどうか
     """
     scope = ['user-library-read']
+    print('Spotify Auth start')
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+    print('Spotify Auth end')
 
     limit, offset = 2, 0
     results = sp.current_user_saved_tracks(limit=limit, offset=offset)
