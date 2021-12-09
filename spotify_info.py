@@ -42,7 +42,6 @@ class SpotifyInfo:
         bool: 更新を行ったかどうか
     """
     scope = ['user-library-read']
-    print('Spotify Auth start')
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
     print('Spotify Auth end')
 
@@ -70,6 +69,8 @@ class SpotifyInfo:
         })
       offset += limit
     
+    print('Spotify: next is sort')
+
     # Liked Songsを昇順ソートして保存する。
     self.json_data.sort_liked_songs()
     self.json_data.save_json_file_liked_songs()
