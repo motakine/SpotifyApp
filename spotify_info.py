@@ -75,3 +75,13 @@ class SpotifyInfo:
     self.json_data.save_json_file_liked_songs()
     return True
 
+
+if __name__ == '__main__':
+  from dotenv import load_dotenv
+  load_dotenv()
+
+  is_local = False
+  si = SpotifyInfo(is_local)
+  si.get_next_liked_song()
+
+  pass

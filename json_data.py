@@ -39,7 +39,7 @@ class JsonData:
     """ローカルのjsonファイルを使用するならTrue, Google Drive上のものを使用するならFalse。
     """
     self.is_allowed_to_run = True
-    """「最終実行日時 < 今日の実行予定時刻 <= 現在の時刻」であり、今アプリを実行して良いならTrue。configファイルを読み込んでから判定を行う。
+    """「次回実行予定時刻 <= 現在の時刻」であり、今アプリを実行して良いならTrue。configファイルを読み込んでから判定を行う。
     """
     if not self.is_local:
       self.google_drive = google_drive.GoogleDrive()
@@ -178,8 +178,8 @@ class JsonData:
 
   def _check_if_allowed_to_run(self):
     """configファイルを読み込んでいることを前提に、今アプリを実行して良いかどうかを返す。
-    具体的には「最終実行日時 < 今日の実行予定時刻 <= 現在の時刻」の場合のみ、
-    乃ち今日はまだ実行しておらず、実行の予定を過ぎている場合のみTrueを返す。
+    具体的には「次回実行予定時刻 <= 現在の時刻」の場合のみ、
+    乃ち「最終実行日時の次の実行予定時刻 <= 現在の時刻」の場合のみTrueを返す。
 
     Returns:
         bool: 今アプリを実行して良いかどうか。
@@ -188,9 +188,13 @@ class JsonData:
     DATE_FORMAT = '%Y/%m/%d'
     date_dt_last = datetime.strptime(self.config_dict.get('last_run'), DATETIME_FORMAT)
     date_dt_now = datetime.now(timezone(timedelta(hours=9)))
-    date_str_run = date_dt_now.strftime(DATE_FORMAT) + ' ' + self.config_dict.get('time_to_run')
+    # 取り敢えず最終実行日に実行予定時刻を繋げる
+    date_str_run = date_dt_last.strftime(DATE_FORMAT) + ' ' + self.config_dict.get('time_to_run')
     date_dt_run = datetime.strptime(date_str_run, DATETIME_FORMAT)
-    return date_dt_last < date_dt_run <= date_dt_now
+    # 最終実行日時がその日の実行予定時刻を過ぎていた場合、その翌日が次回実行予定時刻になる
+    if date_dt_run < date_dt_last:
+      date_dt_run += timedelta(days=1)
+    return date_dt_run <= date_dt_now
 
 
 if __name__ == '__main__':
